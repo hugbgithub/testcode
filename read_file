@@ -1,0 +1,90 @@
+#include <stdio.h>
+#include <unistd.h>
+#include <fcntl.h>
+#include <string.h>
+#include <stdlib.h>
+
+/*trans character */
+struct trans{
+  char f0[4];
+  char f3[6];
+  char f25[2];
+};
+
+struct trans_at{
+  int at;
+  int fee;
+  int err_fee;
+};
+
+#define MAXLEN 10000
+
+int retr_str(char *buff, int pos[], int n, char *result){
+  if (NULL == buff || NULL == result)
+    return -1;
+
+  if (n % 2 != 0)
+    return -2;
+
+  int count = n / 2;
+  int i;
+  int len = 0;
+  for (i = 0; i < count; i++){
+    memcpy(result+len, buff+pos[i*2], pos[i*2+1]);
+    len += pos[i*2+1];  
+    memcpy(result+len, "|", 1);
+    len += 1;
+  }
+
+  result[len] = '\0';
+
+  return 0;
+}
+
+int main(int argc, char *argv[]){
+
+    
+    FILE *fp;
+    /*
+    int fd;
+    char buff[MAXLEN];
+    */
+    char *buff = (char*)malloc(MAXLEN);
+    int read_len;
+    char result[1000];
+    int pos[] = {0, 1, 7, 6};
+    /*
+    fd = open("icom", O_RDWR);
+    if (fd == -1){
+      fprintf(stderr, "firstUnix.c open erro\n");
+      return -1;
+    }
+    */
+    fp = fopen("icom", "rw");
+    if (NULL == fp){
+      fprintf(stderr, "icom open error\n");
+      return -1;
+    }
+
+    int ret;
+    /*
+    while ( (ret = read(fd, buff, MAXLEN)) != 0){
+    */
+    while ( getline(&buff, &read_len, fp) != -1){
+      /*fprintf(stdout, "ret=%d\n", ret); */
+      fprintf(stdout, "read_len=%d\n", read_len);
+      fprintf(stdout, "%s", buff);
+      memset(result, 0x00, sizeof(result));
+      if (retr_str(buff, pos, sizeof(pos)/sizeof(int), result) < 0){
+        fprintf(stderr,"error \n");
+      }
+      fprintf(stdout, "%s\n", result);
+    }
+
+    /*close(fd);*/
+    fclose(fp);
+    free(buff);
+
+    return 0;
+ 
+}
