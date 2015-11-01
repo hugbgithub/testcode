@@ -14,5 +14,10 @@ $ git add readme.txt
 
 同样没有任何输出。在执行第二步git commit之前，我们再运行git status看看当前仓库的状态
 
+现在，我们要把当前版本“append GPL”回退到上一个版本“add distributed”，就可以使用git reset命令：
+
+$ git reset --hard HEAD^
+HEAD is now at ea34578 add distributed
+
 
 
