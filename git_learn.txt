@@ -8,3 +8,11 @@
 •第二步，使用命令git commit，完成。
 
 
+知道了对readme.txt作了什么修改后，再把它提交到仓库就放心多了，提交修改和提交新文件是一样的两步，第一步是git add：
+
+$ git add readme.txt
+
+同样没有任何输出。在执行第二步git commit之前，我们再运行git status看看当前仓库的状态
+
+
+
